@@ -68,14 +68,14 @@ MIT
 
   5. Dilation Gap Visualization: While mathematically correct, doesn't visually show the "gaps" between kernel elements when
   dilation > 1
-  6. Stride "Jump" Animation: Could better show how the kernel jumps across positions
+  6. ~~Stride "Jump" Animation: Could better show how the kernel jumps across positions~~ ✅
   7. ~~Padding Value Display: Shows padding regions but doesn't indicate they're typically filled with zeros~~ ✅
   8. ~~Kernel Center/Anchor Point: No indication of which cell is the kernel's center~~ ✅
 
   Interactive Features Missing:
 
-  9. Preset Configurations: No quick buttons for common setups (same padding, valid padding, etc.)
-  10. Parameter Constraints: Some combinations could be invalid but aren't prevented
+  9. ~~Preset Configurations: No quick buttons for common setups (same padding, valid padding, etc.)~~ ✅
+  10. ~~Parameter Constraints: Some combinations could be invalid but aren't prevented~~ ✅
   11. Formula Breakdown: Shows final formulas but not intermediate steps
   12. Export/Share: No way to save configurations or generate links
 

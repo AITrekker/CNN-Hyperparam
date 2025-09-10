@@ -73,6 +73,13 @@ export default function CnnHyperparamPlayground() {
     return ix >= selRF.startX && ix <= selRF.endX && iy >= selRF.startY && iy <= selRF.endY;
   }
 
+  function isKernelCenter(ix:number, iy:number) {
+    if (!selRF) return false;
+    const centerX = Math.floor((selRF.startX + selRF.endX) / 2);
+    const centerY = Math.floor((selRF.startY + selRF.endY) / 2);
+    return ix === centerX && iy === centerY;
+  }
+
   // Utility: nice label
   function L({label, children}:{label:string, children:React.ReactNode}){
     return (
@@ -105,7 +112,7 @@ export default function CnnHyperparamPlayground() {
             </L>
             <hr className="my-2"/>
             <L label="Kernel">
-              <input type="range" min={1} max={11} step={1} value={kernel} onChange={e=>setKernel(parseInt(e.target.value))} className="w-full"/>
+              <input type="range" min={1} max={11} step={2} value={kernel} onChange={e=>setKernel(parseInt(e.target.value))} className="w-full"/>
               <div className="text-xs text-right text-slate-500">{kernel} × {kernel}</div>
             </L>
             <L label="Stride">
@@ -165,17 +172,18 @@ export default function CnnHyperparamPlayground() {
                 Array.from({length: padW}).map((_, ix) => {
                   const isPad = (ix < padding) || (ix >= padding + inW) || (iy < padding) || (iy >= padding + inH);
                   const inRF = inIsInRF(ix, iy);
+                  const isCenter = isKernelCenter(ix, iy);
                   return (
-                    <div key={`i-${ix}-${iy}`} className={`w-6 h-6 md:w-6 md:h-6 flex items-center justify-center text-[10px] md:text-[10px] border ${inRF?"border-emerald-600":"border-slate-200"} ${inRF?"bg-emerald-100":"bg-white"} ${isPad && showPadding?"bg-slate-100" : ""}`}
-                         title={`(${iy},${ix}) ${isPad?"[pad]":""} ${inRF?"[in RF]":""}`}>
-                      {showNumbers? `${iy},${ix}`: ""}
+                    <div key={`i-${ix}-${iy}`} className={`w-6 h-6 md:w-6 md:h-6 flex items-center justify-center text-[10px] md:text-[10px] border ${inRF?"border-emerald-600":"border-slate-200"} ${isCenter?"bg-emerald-600 text-white":""}${inRF && !isCenter?"bg-emerald-100":""}${!inRF && !isPad?"bg-white":""}${isPad && showPadding && !inRF?"bg-slate-100":""}`}
+                         title={`(${iy},${ix}) ${isPad?"[pad=0]":""} ${inRF?"[in RF]":""} ${isCenter?"[kernel center]":""}`}>
+                      {showNumbers ? `${iy},${ix}` : (isCenter ? "⊗" : (isPad && showPadding && !inRF ? "0" : ""))}
                     </div>
                   );
                 })
               ))}
             </div>
           </div>
-          <p className="text-xs text-slate-500 mt-2">Green cells = current receptive field. Gray = padding region.</p>
+          <p className="text-xs text-slate-500 mt-2">Light green = receptive field, Dark green (⊗) = kernel center, Gray = padding (zeros).</p>
         </div>
 
         {/* Output Grid */}

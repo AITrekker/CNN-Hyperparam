@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth fonts and layout */
+html, body, #root { height: 100%; }
+body { @apply text-slate-800; }
